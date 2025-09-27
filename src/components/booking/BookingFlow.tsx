@@ -11,7 +11,8 @@ import { ConfirmationStep } from "./steps/ConfirmationStep";
 import type { BookingData } from "@/pages/Index";
 
 interface BookingFlowProps {
-  onComplete: (data: BookingData) => void;
+  onComplete?: (data: BookingData) => void;
+  isAdminMode?: boolean;
 }
 
 const STEPS = [
@@ -21,7 +22,7 @@ const STEPS = [
   { id: 4, title: "Confirmação", description: "Revise e confirme" },
 ];
 
-export const BookingFlow = ({ onComplete }: BookingFlowProps) => {
+export const BookingFlow = ({ onComplete, isAdminMode = false }: BookingFlowProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<Partial<BookingData>>({});
 
@@ -42,7 +43,13 @@ export const BookingFlow = ({ onComplete }: BookingFlowProps) => {
     setFormData(updatedData);
     
     if (currentStep === STEPS.length) {
-      onComplete(updatedData as BookingData);
+      if (onComplete) {
+        onComplete(updatedData as BookingData);
+      } else if (isAdminMode) {
+        // In admin mode, reset form after successful booking
+        setFormData({});
+        setCurrentStep(1);
+      }
     } else {
       handleNext();
     }
@@ -79,6 +86,7 @@ export const BookingFlow = ({ onComplete }: BookingFlowProps) => {
           <ConfirmationStep 
             data={formData as BookingData}
             onComplete={handleStepComplete}
+            isAdminMode={isAdminMode}
           />
         );
       default:

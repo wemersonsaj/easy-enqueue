@@ -1,111 +1,91 @@
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Users, Settings, BarChart3 } from "lucide-react";
+import { Calendar, Users, Settings, BarChart3, UserPlus } from "lucide-react";
+import { AppointmentsTab } from "@/components/admin/AppointmentsTab";
+import { ServicesTab } from "@/components/admin/ServicesTab";
+import { EmployeesTab } from "@/components/admin/EmployeesTab";
+import { ReportsTab } from "@/components/admin/ReportsTab";
+import { SettingsTab } from "@/components/admin/SettingsTab";
+import { BookingFlow } from "@/components/booking/BookingFlow";
 
 const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState("appointments");
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
             Painel Administrativo
           </h1>
           <p className="text-lg text-muted-foreground">
-            Para acessar o painel completo, conecte o Supabase
+            Gerencie seu negócio de forma eficiente
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                Agendamentos
-              </CardTitle>
-              <CardDescription>
-                Visualize e gerencie todos os horários marcados
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                Acessar Agendamentos
-              </Button>
-            </CardContent>
-          </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-6 mb-8">
+            <TabsTrigger value="appointments" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Agendamentos
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="flex items-center gap-2">
+              <UserPlus className="w-4 h-4" />
+              Agendar
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Relatórios
+            </TabsTrigger>
+            <TabsTrigger value="services" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Serviços
+            </TabsTrigger>
+            <TabsTrigger value="employees" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Funcionários
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Configurações
+            </TabsTrigger>
+          </TabsList>
 
-          <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                Funcionários
-              </CardTitle>
-              <CardDescription>
-                Gerencie sua equipe e serviços oferecidos
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                Gerenciar Equipe
-              </Button>
-            </CardContent>
-          </Card>
+          <TabsContent value="appointments">
+            <AppointmentsTab />
+          </TabsContent>
 
-          <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                Relatórios
-              </CardTitle>
-              <CardDescription>
-                Analise o desempenho do seu negócio
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                Ver Relatórios
-              </Button>
-            </CardContent>
-          </Card>
+          <TabsContent value="schedule">
+            <Card className="shadow-elegant">
+              <CardHeader>
+                <CardTitle>Agendar Horário</CardTitle>
+                <CardDescription>
+                  Use este formulário para agendar um horário manualmente para um cliente
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <BookingFlow isAdminMode={true} />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          <Card className="shadow-card hover:shadow-elegant transition-all duration-300 md:col-span-2 lg:col-span-1">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Settings className="w-5 h-5 text-primary" />
-                Configurações
-              </CardTitle>
-              <CardDescription>
-                Personalize seu sistema de agendamento
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" disabled>
-                Configurar Sistema
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+          <TabsContent value="reports">
+            <ReportsTab />
+          </TabsContent>
 
-        <div className="mt-12 text-center">
-          <Card className="max-w-lg mx-auto shadow-elegant">
-            <CardHeader>
-              <CardTitle className="text-primary">Conecte o Supabase</CardTitle>
-              <CardDescription>
-                Para ativar todas as funcionalidades do painel administrativo, conecte sua conta Supabase
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Clique no botão verde "Supabase" no topo da tela para configurar:
-              </p>
-              <ul className="text-left text-sm text-muted-foreground space-y-1">
-                <li>• Banco de dados para agendamentos</li>
-                <li>• Sistema de autenticação</li>
-                <li>• Gerenciamento de usuários</li>
-                <li>• APIs para funcionalidades avançadas</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+          <TabsContent value="services">
+            <ServicesTab />
+          </TabsContent>
+
+          <TabsContent value="employees">
+            <EmployeesTab />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <SettingsTab />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

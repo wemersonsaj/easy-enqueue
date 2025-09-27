@@ -10,6 +10,7 @@ import type { BookingData } from "@/pages/Index";
 interface ConfirmationStepProps {
   data: BookingData;
   onComplete: (data: Partial<BookingData>) => void;
+  isAdminMode?: boolean;
 }
 
 // Mock data - this will come from Supabase later
@@ -27,7 +28,7 @@ const mockServices = [
   { id: "5", name: "Pedicure", price: 30, duration: 50 },
 ];
 
-export const ConfirmationStep = ({ data, onComplete }: ConfirmationStepProps) => {
+export const ConfirmationStep = ({ data, onComplete, isAdminMode = false }: ConfirmationStepProps) => {
   const employee = mockEmployees.find(emp => emp.id === data.employeeId);
   const service = mockServices.find(svc => svc.id === data.serviceId);
   const appointmentDate = new Date(data.date);
@@ -134,7 +135,7 @@ export const ConfirmationStep = ({ data, onComplete }: ConfirmationStepProps) =>
         onClick={handleConfirm}
         className="w-full bg-gradient-primary hover:opacity-90 transition-opacity text-lg py-6"
       >
-        Confirmar Agendamento
+        {isAdminMode ? "Agendar para Cliente" : "Confirmar Agendamento"}
       </Button>
     </div>
   );
